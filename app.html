@@ -899,8 +899,9 @@ function openPortal(){
 function checkAuth(){
   // Check for payment success redirect
   var urlParams=new URLSearchParams(window.location.search);
-  if(urlParams.get('payment')==='success'){
-    // Clean URL
+  var paymentSuccess=urlParams.get('payment')==='success';
+  if(paymentSuccess){
+    // Clean URL immediately
     window.history.replaceState({},document.title,window.location.pathname);
   }
   
@@ -935,7 +936,33 @@ function checkAuth(){
     return;
   }
 
-  // Step 5: Validate token + get subscription status from backend
+  // Step 4.5: If returning from Stripe payment, verify payment first
+  if(paymentSuccess&&AUTH_API){
+    var verifyUrl=AUTH_API+'?action=verifyPayment&email='+encodeURIComponent(authData.email)+'&token='+encodeURIComponent(authData.token);
+    fetch(verifyUrl)
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d.success){
+        // Payment verified — now do normal auth check
+        doAuthCheck();
+      } else {
+        // Verification failed — still do normal auth check (might be fine via webhook)
+        doAuthCheck();
+      }
+    })
+    .catch(function(){
+      // Network error — still proceed
+      doAuthCheck();
+    });
+    return;
+  }
+
+  // Step 5: Normal auth check
+  doAuthCheck();
+}
+
+function doAuthCheck(){
+  var age=Date.now()-(authData.ts||0);
   if(AUTH_API){
     var url=AUTH_API+'?action=checkAuth&email='+encodeURIComponent(authData.email)+'&token='+encodeURIComponent(authData.token);
     fetch(url)
