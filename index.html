@@ -237,7 +237,7 @@
   <h1 class="sec-title fade-up" style="animation-delay:.1s">Speak. AI organizes.<br>Close more deals.</h1>
   <p class="sec-desc fade-up" style="animation-delay:.2s">VoiceCRM turns your voice into structured CRM data. Log leads, schedule follow-ups, and track deals — all by talking naturally.</p>
   <div class="hero-btns fade-up" style="animation-delay:.3s">
-    <button class="btn-primary" onclick="showAuth()">Get Started Free</button>
+    <button class="btn-primary" onclick="showAuth()">Start 14-Day Free Trial</button>
     <a class="btn-secondary" href="#how">See how it works</a>
   </div>
   <div class="hero-preview fade-up" style="animation-delay:.4s">
@@ -392,35 +392,34 @@
 <!-- PRICING -->
 <section class="pricing" id="pricing">
   <div class="sec-label fade-up">Pricing</div>
-  <h2 class="sec-title fade-up">Start free, upgrade anytime</h2>
-  <p class="sec-desc fade-up" style="margin:0 auto">No credit card required. Full access during early access period.</p>
+  <h2 class="sec-title fade-up">Simple, transparent pricing</h2>
+  <p class="sec-desc fade-up" style="margin:0 auto">Start with a 14-day free trial. Cancel anytime.</p>
   <div class="price-cards">
     <div class="price-card fade-up">
-      <div class="price-name">Early Access</div>
-      <div class="price-amount" style="color:var(--green2)">Free <span>/ forever*</span></div>
-      <div class="price-period">*During early access period</div>
+      <div class="price-name">CRM Setup</div>
+      <div class="price-amount">$29 <span>one-time</span></div>
+      <div class="price-period">Your own private Google Sheets CRM</div>
       <ul class="price-features">
-        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Voice input with AI</li>
-        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Dashboard & KPIs</li>
-        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Leads & Tasks</li>
-        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Deal tracking</li>
-        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Google Sheets CRM</li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Pre-built CRM Google Sheet</li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Leads, Tasks & Deals tabs</li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Dashboard with KPIs</li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Yours forever — full ownership</li>
       </ul>
-      <button class="price-btn primary" onclick="showAuth()">Get Started Free</button>
+      <button class="price-btn secondary" onclick="showAuth()">Included with Pro</button>
     </div>
     <div class="price-card featured fade-up">
-      <div class="price-badge">Coming Soon</div>
-      <div class="price-name">Pro</div>
-      <div class="price-amount">99 <span>AED/mo</span></div>
-      <div class="price-period">Billed monthly after early access</div>
+      <div class="price-badge">14 Days Free</div>
+      <div class="price-name">VoiceCRM Pro</div>
+      <div class="price-amount">$59 <span>/month</span></div>
+      <div class="price-period">Billed monthly after free trial</div>
       <ul class="price-features">
-        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Everything in Free</li>
-        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Unlimited voice entries</li>
-        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Priority AI processing</li>
-        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Team access (up to 5)</li>
-        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>WhatsApp integration</li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>AI voice transcription</li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Unlimited leads & deals</li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Real-time dashboard & KPIs</li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Apple Pay & all cards accepted</li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Cancel anytime — no lock-in</li>
       </ul>
-      <button class="price-btn secondary" disabled>Coming Soon</button>
+      <button class="price-btn primary" onclick="showAuth()">Start Free Trial</button>
     </div>
   </div>
 </section>
@@ -433,7 +432,7 @@
     <a href="#features">Features</a>
     <a href="#how">How it works</a>
     <a href="#pricing">Pricing</a>
-    <a href="mailto:support@sheetsouq.com">Contact</a>
+    <a href="/cdn-cgi/l/email-protection#51222421213e2325112239343425223e24207f323e3c">Contact</a>
   </div>
   <div class="foot-copy">&copy; 2026 SheetSouq. All rights reserved.</div>
 </footer>
@@ -469,17 +468,13 @@
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── Scroll animations ──
 var obs=new IntersectionObserver(function(ents){ents.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target);}});},{threshold:0.15});
 document.querySelectorAll('.fade-up').forEach(function(el){obs.observe(el);});
 
 // ── Auth state ──
-// ╔══════════════════════════════════════════════════════════╗
-// ║  PASTE YOUR AUTH WEB APP URL BELOW (between the quotes) ║
-// ║  Example: 'https://script.google.com/macros/s/AKf.../exec'  ║
-// ╚══════════════════════════════════════════════════════════╝
-var AUTH_API='https://script.google.com/macros/s/AKfycbz62a2KQ-IW9_3ibd3mqH-XQjfoYDhUVHqNplxxATu9CbT8EUgu4mXL9TlPbIceryRy/exec'; // ← PASTE URL HERE
+var AUTH_API='https://script.google.com/macros/s/AKfycbz62a2KQ-IW9_3ibd3mqH-XQjfoYDhUVHqNplxxATu9CbT8EUgu4mXL9TlPbIceryRy/exec'; // Will be set to your Apps Script URL
 var userEmail='';
 
 function showAuth(){document.getElementById('authModal').classList.add('show');}
@@ -594,9 +589,7 @@ function hpNav(name){
   document.querySelectorAll('.hp-scr').forEach(function(s){s.classList.remove('active');});
   document.getElementById(hpMap[name]).classList.add('active');
   // Switch nav active
-  document.querySelectorAll('.hp-nav-i').forEach(function(n){n.classList.toggle('on',n.dataset.hp===name);});
-  // Tag
-  var tag=document.getElementById('hpTag');
+  docum');
   tag.textContent=hpLabels[name];tag.classList.add('show');
   setTimeout(function(){tag.classList.remove('show');},1500);
   // Voice animation
