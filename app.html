@@ -441,7 +441,7 @@ function wizEnd(){
 }
 
 function chkSetup(){API=localStorage.getItem('voicecrm_api')||'';if(API){$('setupScreen').classList.add('hidden');$('mainApp').classList.remove('hidden');initApp();}else{$('setupScreen').classList.remove('hidden');$('mainApp').classList.add('hidden');}}
-function saveApiUrl(){var u=$('apiUrlInput').value.trim();if(!u||!u.startsWith('https://script.google.com/')){alert('Enter a valid Apps Script URL.');return;}var b=$('setupBtn');b.textContent='Connecting...';b.disabled=true;fetch(u+'?action=ping').then(function(r){return r.json();}).then(function(d){if(d.success){localStorage.setItem('voicecrm_api',u);API=u;$('setupScreen').classList.add('hidden');$('mainApp').classList.remove('hidden');initApp();}else throw new Error(d.error||'Failed');}).catch(function(e){alert('Error: '+e.message);b.textContent='Connect';b.disabled=false;});}
+function saveApiUrl(){var u=$('apiUrlInput').value.trim();if(!u||!u.startsWith('https://script.google.com/')){alert('Enter a valid Apps Script URL.');return;}var b=$('setupBtn');b.textContent='Connecting...';b.disabled=true;fetch(u,{method:'POST',body:JSON.stringify({action:'ping'}),redirect:'follow'}).then(function(r){return r.json();}).then(function(d){if(d.success){localStorage.setItem('voicecrm_api',u);API=u;$('setupScreen').classList.add('hidden');$('mainApp').classList.remove('hidden');initApp();}else throw new Error(d.error||'Failed');}).catch(function(e){alert('Error: '+e.message);b.textContent='Connect';b.disabled=false;});}
 function showSetup(){$('apiUrlInput').value=API;$('setupScreen').classList.remove('hidden');$('mainApp').classList.add('hidden');$('setupBtn').textContent='Connect';$('setupBtn').disabled=false;}
 
 function initApp(){
