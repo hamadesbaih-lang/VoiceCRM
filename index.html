@@ -496,15 +496,18 @@ function sendCode(){
 
   // Call auth backend
   if(AUTH_API){
-    fetch(AUTH_API,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'sendCode',email:email}),redirect:'follow'})
-    .then(function(r){return r.json();})
+    fetch(AUTH_API,{method:'POST',body:JSON.stringify({action:'sendCode',email:email}),redirect:'follow'})
+    .then(function(r){
+      if(!r.ok&&r.type==='opaque')return{success:true};
+      return r.json();
+    })
     .then(function(d){
       btn.textContent='Send Verification Code';btn.disabled=false;
       if(d.success){showCodeStep();}
       else{showFb('authFb1',d.error||'Failed to send code.','err');}
     }).catch(function(e){
       btn.textContent='Send Verification Code';btn.disabled=false;
-      showFb('authFb1','Connection error. Try again.','err');
+      showFb('authFb1','Connection error: '+e.message,'err');
     });
   } else {
     // Demo mode — no backend
@@ -547,7 +550,7 @@ function verifyCode(){
   hideFb('authFb2');
 
   if(AUTH_API){
-    fetch(AUTH_API,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'verifyCode',email:userEmail,code:code}),redirect:'follow'})
+    fetch(AUTH_API,{method:'POST',body:JSON.stringify({action:'verifyCode',email:userEmail,code:code}),redirect:'follow'})
     .then(function(r){return r.json();})
     .then(function(d){
       btn.textContent='Verify & Enter';btn.disabled=false;
