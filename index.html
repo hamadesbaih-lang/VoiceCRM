@@ -588,7 +588,7 @@ function saveEd(){document.querySelectorAll('#eFlds .mi').forEach(function(i){va
 function subText(){var i=$('tInp'),t=i.value.trim();if(t.length>2){i.value='';procTxt(t);}}
 function useH(e){procTxt(e.textContent);}
 // ═══ AUTH GATE — Must pass before anything loads ═══
-var AUTH_API=''; // ← PASTE YOUR AUTH WEB APP URL HERE
+var AUTH_API='https://script.google.com/macros/s/AKfycbz62a2KQ-IW9_3ibd3mqH-XQjfoYDhUVHqNplxxATu9CbT8EUgu4mXL9TlPbIceryRy/exec'; // ← PASTE YOUR AUTH WEB APP URL HERE
 var SESSION_MAX_AGE=30*24*60*60*1000; // 30 days in ms
 var authData=null;
 
