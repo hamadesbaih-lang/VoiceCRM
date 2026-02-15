@@ -765,6 +765,52 @@ function proceedToApp(){
 }
 
 function showPaywall(reason){
+  // Auto-verify: check if user actually paid (webhook may have failed)
+  var urlParams=new URLSearchParams(window.location.search);
+  var justPaid=urlParams.get('payment')==='success';
+  
+  if(justPaid&&AUTH_API&&authData&&!window._verifyAttempted){
+    window._verifyAttempted=true;
+    window.history.replaceState({},document.title,window.location.pathname);
+    
+    // Show loading state
+    var pw=$('paywall');
+    pw.classList.remove('hidden');
+    var title=$('pwTitle');
+    title.textContent='Verifying your payment...';
+    var msg=$('pwMsg');
+    msg.textContent='Please wait while we confirm your subscription.';
+    $('pwCta').style.display='none';
+    
+    var verifyUrl=AUTH_API+'?action=verifyPayment&email='+encodeURIComponent(authData.email)+'&token='+encodeURIComponent(authData.token);
+    fetch(verifyUrl)
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d.success&&d.subscription&&d.subscription.active){
+        // Payment verified! Skip paywall
+        subInfo=d.subscription;
+        $('pwCta').style.display='';
+        if(subInfo.reason==='stripe_trial'){
+          showTrialBanner(14);
+        }
+        proceedToApp();
+      } else {
+        // Verification failed — show paywall normally
+        $('pwCta').style.display='';
+        showPaywallUI(reason);
+      }
+    })
+    .catch(function(){
+      $('pwCta').style.display='';
+      showPaywallUI(reason);
+    });
+    return;
+  }
+  
+  showPaywallUI(reason);
+}
+
+function showPaywallUI(reason){
   var pw=$('paywall');
   var badge=$('pwBadge');
   var title=$('pwTitle');
@@ -897,14 +943,6 @@ function openPortal(){
 
 // ═══ AUTH CHECK ═══
 function checkAuth(){
-  // Check for payment success redirect
-  var urlParams=new URLSearchParams(window.location.search);
-  var paymentSuccess=urlParams.get('payment')==='success';
-  if(paymentSuccess){
-    // Clean URL immediately
-    window.history.replaceState({},document.title,window.location.pathname);
-  }
-  
   // Step 1: Check localStorage for auth data
   var raw=localStorage.getItem('voicecrm_auth');
   if(!raw){
@@ -933,27 +971,6 @@ function checkAuth(){
   if(age>SESSION_MAX_AGE){
     localStorage.removeItem('voicecrm_auth');
     authFail('Your session has expired. Please log in again.');
-    return;
-  }
-
-  // Step 4.5: If returning from Stripe payment, verify payment first
-  if(paymentSuccess&&AUTH_API){
-    var verifyUrl=AUTH_API+'?action=verifyPayment&email='+encodeURIComponent(authData.email)+'&token='+encodeURIComponent(authData.token);
-    fetch(verifyUrl)
-    .then(function(r){return r.json();})
-    .then(function(d){
-      if(d.success){
-        // Payment verified — now do normal auth check
-        doAuthCheck();
-      } else {
-        // Verification failed — still do normal auth check (might be fine via webhook)
-        doAuthCheck();
-      }
-    })
-    .catch(function(){
-      // Network error — still proceed
-      doAuthCheck();
-    });
     return;
   }
 
