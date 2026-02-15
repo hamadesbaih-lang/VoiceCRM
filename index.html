@@ -475,7 +475,7 @@ var obs=new IntersectionObserver(function(ents){ents.forEach(function(e){if(e.is
 document.querySelectorAll('.fade-up').forEach(function(el){obs.observe(el);});
 
 // ── Auth state ──
-var AUTH_API=''; // Will be set to your Apps Script URL
+var AUTH_API='https://script.google.com/macros/s/AKfycbz62a2KQ-IW9_3ibd3mqH-XQjfoYDhUVHqNplxxATu9CbT8EUgu4mXL9TlPbIceryRy/exec'; // Will be set to your Apps Script URL
 var userEmail='';
 
 function showAuth(){document.getElementById('authModal').classList.add('show');}
