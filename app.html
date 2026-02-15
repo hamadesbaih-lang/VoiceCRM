@@ -321,9 +321,16 @@
   <div class="pw-title" id="pwTitle">Upgrade to Pro</div>
   <div class="pw-msg" id="pwMsg">Your free trial has ended. Subscribe to continue using VoiceCRM's AI-powered voice features, lead management, and deal tracking.</div>
   
-  <div class="pw-price-box">
+  <!-- Plan Toggle -->
+  <div style="display:flex;background:var(--glass);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:20px;width:100%;max-width:340px">
+    <button id="pwToggleMonthly" onclick="setPlan('monthly')" style="flex:1;padding:10px;border-radius:10px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;background:linear-gradient(135deg,var(--gold),#b8860b);color:#fff">Monthly</button>
+    <button id="pwToggleYearly" onclick="setPlan('yearly')" style="flex:1;padding:10px;border-radius:10px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;background:transparent;color:var(--text2)">Yearly <span style="color:var(--green);font-size:11px">Save 20%</span></button>
+  </div>
+  
+  <!-- Monthly pricing -->
+  <div id="pwMonthly" class="pw-price-box">
     <div class="pw-price-row">
-      <span class="pw-price-label">Setup (one-time)</span>
+      <span class="pw-price-label">CRM Setup (one-time)</span>
       <span class="pw-price-value">$29</span>
     </div>
     <div class="pw-divider"></div>
@@ -334,7 +341,40 @@
     <div class="pw-divider"></div>
     <div class="pw-price-row">
       <span class="pw-price-label">14-day free trial</span>
+      <span class="pw-price-value" style="color:var(--green);font-size:14px">On the $59/mo</span>
+    </div>
+    <div class="pw-divider"></div>
+    <div class="pw-price-row">
+      <span class="pw-price-label">Today you pay</span>
+      <span class="pw-price-value" style="font-size:22px">$29</span>
+    </div>
+  </div>
+  
+  <!-- Yearly pricing -->
+  <div id="pwYearly" class="pw-price-box" style="display:none">
+    <div class="pw-price-row">
+      <span class="pw-price-label">Yearly subscription</span>
+      <span class="pw-price-value">$569<span class="pw-price-note">/year</span></span>
+    </div>
+    <div class="pw-divider"></div>
+    <div class="pw-price-row">
+      <span class="pw-price-label">That's only</span>
+      <span class="pw-price-value" style="color:var(--teal2)">$47<span class="pw-price-note">/month</span></span>
+    </div>
+    <div class="pw-divider"></div>
+    <div class="pw-price-row">
+      <span class="pw-price-label">CRM Setup</span>
+      <span class="pw-price-value" style="color:var(--green);font-size:14px">Included free</span>
+    </div>
+    <div class="pw-divider"></div>
+    <div class="pw-price-row">
+      <span class="pw-price-label">14-day free trial</span>
       <span class="pw-price-value" style="color:var(--green);font-size:14px">Included</span>
+    </div>
+    <div class="pw-divider"></div>
+    <div class="pw-price-row">
+      <span class="pw-price-label">You save</span>
+      <span class="pw-price-value" style="color:var(--green)">$168<span class="pw-price-note">/year</span></span>
     </div>
   </div>
   
@@ -346,8 +386,8 @@
     <div class="pw-feat"><div class="pw-feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>Apple Pay &amp; all major cards accepted</div>
   </div>
   
-  <button class="pw-cta" id="pwCta" onclick="startCheckout()">Start 14-Day Free Trial</button>
-  <div class="pw-cta-sub">Card required. Cancel anytime. First charge after 14 days.</div>
+  <button class="pw-cta" id="pwCta" onclick="startCheckout()">Pay $29 &amp; Start Free Trial</button>
+  <div class="pw-cta-sub" id="pwCtaSub">$29 charged now for CRM setup. $59/month starts after 14-day trial.</div>
   <button class="pw-portal hidden" id="pwPortal" onclick="openPortal()">Manage Subscription</button>
   <button class="pw-logout-link" onclick="doLogout()">Log out</button>
 </div>
@@ -738,8 +778,7 @@ function showPaywall(reason){
     badge.textContent='Trial Expired';
     title.textContent='Upgrade to Pro';
     msg.textContent='Your 14-day free trial has ended. Subscribe to continue using VoiceCRM\'s AI voice features, lead management, and deal tracking.';
-    cta.textContent='Subscribe — $59/month';
-    cta.onclick=function(){startCheckout();};
+    setPlan(selectedPlan);
     portal.classList.add('hidden');
   } else if(reason==='past_due'){
     badge.className='pw-badge past-due';
@@ -752,10 +791,9 @@ function showPaywall(reason){
   } else if(reason==='canceled'||reason==='no_subscription'){
     badge.className='pw-badge expired';
     badge.textContent=reason==='canceled'?'Subscription Ended':'No Subscription';
-    title.textContent='Start Your Free Trial';
+    title.textContent='Start Your Subscription';
     msg.textContent='Get 14 days free with full access to VoiceCRM. AI voice transcription, lead management, deal tracking — all included.';
-    cta.textContent='Start 14-Day Free Trial';
-    cta.onclick=function(){startCheckout();};
+    setPlan(selectedPlan);
     if(subInfo&&subInfo.setupPaid){
       portal.classList.remove('hidden');
     } else {
@@ -785,6 +823,33 @@ function showTrialBanner(daysLeft){
   }
 }
 
+// ═══ PLAN SELECTION ═══
+var selectedPlan='monthly';
+
+function setPlan(plan){
+  selectedPlan=plan;
+  var mBtn=$('pwToggleMonthly');
+  var yBtn=$('pwToggleYearly');
+  var mBox=$('pwMonthly');
+  var yBox=$('pwYearly');
+  var cta=$('pwCta');
+  var ctaSub=$('pwCtaSub');
+  
+  if(plan==='yearly'){
+    yBtn.style.background='linear-gradient(135deg,var(--gold),#b8860b)';yBtn.style.color='#fff';
+    mBtn.style.background='transparent';mBtn.style.color='var(--text2)';
+    mBox.style.display='none';yBox.style.display='';
+    cta.innerHTML='Start 14-Day Free Trial';
+    ctaSub.textContent='Card required. $569/year charged after 14-day trial. Cancel anytime.';
+  } else {
+    mBtn.style.background='linear-gradient(135deg,var(--gold),#b8860b)';mBtn.style.color='#fff';
+    yBtn.style.background='transparent';yBtn.style.color='var(--text2)';
+    yBox.style.display='none';mBox.style.display='';
+    cta.innerHTML='Pay $29 &amp; Start Free Trial';
+    ctaSub.textContent='$29 charged now for CRM setup. $59/month starts after 14-day trial.';
+  }
+}
+
 // ═══ STRIPE CHECKOUT ═══
 function startCheckout(){
   if(!AUTH_API||!authData){alert('Please log in first.');return;}
@@ -793,7 +858,7 @@ function startCheckout(){
   cta.textContent='Opening checkout...';
   cta.disabled=true;
   
-  var url=AUTH_API+'?action=createCheckout&email='+encodeURIComponent(authData.email)+'&token='+encodeURIComponent(authData.token);
+  var url=AUTH_API+'?action=createCheckout&email='+encodeURIComponent(authData.email)+'&token='+encodeURIComponent(authData.token)+'&plan='+encodeURIComponent(selectedPlan);
   
   fetch(url)
   .then(function(r){return r.json();})
